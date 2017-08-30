@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 /* launch a service */
 pid_t launch_svc(CONF *conf, const char *name)
 {
-    int fds[2], i;
+    int fds[2];
     pid_t pid;
     char *cmd, *args, *argv[32] = {0}, **ap, *dir;
     char *groups;
@@ -151,26 +151,7 @@ pid_t launch_svc(CONF *conf, const char *name)
                     break;
     }
 
-    if (NCONF_get_number_e(conf, name, "uid", &uid))
-    {
-        /* change real, effective, and saved uid to uid */
-        warnx("setuid %ld", uid);
-    }
 
-    if (NCONF_get_number_e(conf, name, "gid", &gid))
-    {
-        /* change real, effective, and saved gid to gid */
-        warnx("setgid %ld", gid);
-    }
-
-    if ((groups = NCONF_get_string(conf, name, "extra_gids")))
-    {
-        ngids = 0;
-        CONF_parse_list(groups, ',', 1, &group_parse_cb, NULL);
-        /* set the grouplist to gids */
-        for (i = 0; i < ngids; i++)
-            warnx("extra gid %d", gids[i]);
-    }
 
     if ((dir = NCONF_get_string(conf, name, "dir")))
     {
@@ -178,6 +159,31 @@ pid_t launch_svc(CONF *conf, const char *name)
         chdir(dir); 
         if(chroot(dir))
            warnx("chroot error");
+    }
+
+    if (NCONF_get_number_e(conf, name, "gid", &gid))
+    {
+        /* change real, effective, and saved gid to gid */
+        if(setresgid(-1, (gid_t)gid, -1))
+            warnx("setgid %ld", gid);
+    }
+
+    if ((groups = NCONF_get_string(conf, name, "extra_gids")))
+    {
+        ngids = 0;
+        CONF_parse_list(groups, ',', 1, &group_parse_cb, NULL);
+        /* set the grouplist to gids */
+        if(setgroups(ngids, gids))
+            warnx("setgroups error");
+       // for (i = 0; i < ngids; i++)
+       //     warnx("extra gid %d", gids[i]);
+    }
+
+    if (NCONF_get_number_e(conf, name, "uid", &uid))
+    {
+        /* change real, effective, and saved uid to uid */
+        if(setresuid(-1, (uid_t)uid, -1))
+            warnx("setuid %ld", uid);
     }
 
     signal(SIGCHLD, SIG_DFL);

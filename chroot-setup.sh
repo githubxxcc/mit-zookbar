@@ -24,7 +24,6 @@ set_perms() {
 }
 
 rm -rf /jail
-echo "Removed /jail"
 mkdir -p /jail
 cp -p index.html /jail
 
@@ -70,4 +69,6 @@ rm -rf /jail/zoobar/db
 
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
+
+chown -R 61011:61011 /jail/zoobar/db
 
