@@ -175,8 +175,7 @@ pid_t launch_svc(CONF *conf, const char *name)
     if ((dir = NCONF_get_string(conf, name, "dir")))
     {
        /* chroot into dir */
-        chdir(dir);
-        
+        chdir(dir); 
         if(chroot(dir))
            warnx("chroot error");
     }
