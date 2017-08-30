@@ -24,6 +24,7 @@ set_perms() {
 }
 
 rm -rf /jail
+echo "Removed /jail"
 mkdir -p /jail
 cp -p index.html /jail
 

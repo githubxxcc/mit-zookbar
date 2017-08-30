@@ -38,7 +38,9 @@ def sh(cmd, exit_onerr=True):
 pwfiles = ['passwd', 'shadow', 'group']
 def clean_env():
     # remove /jail and reset password/group files
+    log("+ cleaning env : clean_env()")
     if os.path.exists("/jail"):
+        log(" here")
         sh("mv /jail /jail.bak")
     if os.path.exists("zoobar/db"):
         sh("rm -rf zoobar/db.bak")
@@ -83,7 +85,7 @@ def setup():
 
     log("+ running make.. output in /tmp/make.out")
     sh("make clean >/dev/null")
-    sh("make all setup >/tmp/make.out 2>&1")
+    sh("make all setup")
 
     log("+ running zookld in the background.. output in /tmp/zookld.out")
     zookld_out = open("/tmp/zookld.out", "w")

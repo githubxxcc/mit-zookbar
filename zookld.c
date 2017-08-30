@@ -18,6 +18,9 @@
 #define MAX_SERVICES 256
 #define MAX_GIDS     256
 
+
+
+
 static int svcfds[MAX_SERVICES];
 static char svcnames[MAX_SERVICES][256];
 static int nsvcs = 0; /* actual number of services */
@@ -29,6 +32,8 @@ static int service_parse_cb(const char *, int, void *);
 static int group_parse_cb(const char *, int, void *);
 static pid_t launch_svc(CONF *, const char *);
 static int start_server(const char *);
+
+
 
 int main(int argc, char **argv)
 {
@@ -115,6 +120,8 @@ pid_t launch_svc(CONF *conf, const char *name)
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, fds))
         err(1, "socketpair");
 
+
+
     switch ((pid = fork()))
     {
     case -1: /* error */
@@ -167,7 +174,10 @@ pid_t launch_svc(CONF *conf, const char *name)
 
     if ((dir = NCONF_get_string(conf, name, "dir")))
     {
-        /* chroot into dir */
+       /* chroot into dir */
+        chdir(dir);
+       if(chroot(dir))
+           warnx("chroot error");
     }
 
     signal(SIGCHLD, SIG_DFL);
