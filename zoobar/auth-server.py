@@ -6,8 +6,21 @@ import auth
 from debug import *
 
 class AuthRpcServer(rpclib.RpcServer):
-    ## Fill in RPC methods here.
-    pass
+    def rpc_login(self, username, password):
+        db = cred_setup()
+        cred = db.query(Cred).get(username)
+        if not cred:
+            return None 
+        if cred.password == password:
+            return auth.newtoken(db, cred)
+        else:
+            return None
+ 
+    #def rpc_check_token(self, s):
+
+
+
+
 
 (_, dummy_zookld_fd, sockpath) = sys.argv
 

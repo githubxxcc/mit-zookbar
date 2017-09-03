@@ -3,7 +3,9 @@ from functools import wraps
 from debug import *
 from zoodb import *
 
-import auth
+# import auth
+import auth_client
+
 import bank
 import random
 
@@ -12,7 +14,8 @@ class User(object):
         self.person = None
 
     def checkLogin(self, username, password):
-        token = auth.login(username, password)
+#        token = auth.login(username, password)
+        token = auth_client.login(username, password)
         if token is not None:
             return self.loginCookie(username, token)
         else:

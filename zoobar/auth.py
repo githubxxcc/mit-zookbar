@@ -4,11 +4,18 @@ from debug import *
 import hashlib
 import random
 
-def newtoken(db, person):
-    hashinput = "%s%.10f" % (person.password, random.random())
-    person.token = hashlib.md5(hashinput).hexdigest()
+#def newtoken(db, person):
+#    hashinput = "%s%.10f" % (person.password, random.random())
+#    person.token = hashlib.md5(hashinput).hexdigest()
+#    db.commit()
+#    return person.token
+
+def newtoken(db, cred):
+    hashinput = "%s%.10f" % (cred.password, random.random())
+    cred.token = hashlib.md5(hashinput).hexdigest()
     db.commit()
-    return person.token
+    return cred.token
+   
 
 def login(username, password):
     db = person_setup()

@@ -70,5 +70,12 @@ rm -rf /jail/zoobar/db
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
 
-chown -R 61011:61011 /jail/zoobar/db
+# dynmiac_svc
+chown -R 0:61012 /jail/zoobar/db
+chown 61012:61012 /jail/zoobar/*.cgi
+
+chmod -R 771 /jail/zoobar/db
+
+
+
 

@@ -4,6 +4,12 @@ import rpclib
 
 def login(username, password):
     ## Fill in code here.
+    
+    with rpclib.client_connect('/authsvc/sock') as c:
+        token = c.call('login', username = username, password = password)
+        
+        return token
+        
 
 def register(username, password):
     ## Fill in code here.
