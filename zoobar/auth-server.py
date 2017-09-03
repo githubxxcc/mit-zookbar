@@ -16,8 +16,13 @@ class AuthRpcServer(rpclib.RpcServer):
         else:
             return None
  
-    #def rpc_check_token(self, s):
-
+    def rpc_check_token(self, username):
+        db = cred_setup()
+        cred = db.query(Cred).get(username)
+        if not cred:
+            return None
+        else:
+            return cred.token
 
 
 
