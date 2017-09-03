@@ -28,16 +28,18 @@ def login(username, password):
         return None
 
 def register(username, password):
-    db = person_setup()
-    person = db.query(Person).get(username)
-    if person:
+    db = cred_setup()
+    cred = db.query(Cred).get(username)
+    if cred:
         return None
-    newperson = Person()
-    newperson.username = username
-    newperson.password = password
-    db.add(newperson)
+    new_cred = Cred()
+    new_cred.username = username
+    new_cred.password = password
+    db.add(new_cred)
     db.commit()
-    return newtoken(db, newperson)
+
+    return newtoken(db, new_cred)    
+
 
 def check_token(username, token):
     db = person_setup()
@@ -46,4 +48,3 @@ def check_token(username, token):
         return True
     else:
         return False
-

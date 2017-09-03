@@ -24,7 +24,8 @@ class AuthRpcServer(rpclib.RpcServer):
         else:
             return cred.token
 
-
+    def rpc_register(self, un, pw):
+        return auth.register(un, pw)
 
 
 (_, dummy_zookld_fd, sockpath) = sys.argv
