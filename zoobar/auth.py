@@ -18,33 +18,48 @@ def newtoken(db, cred):
    
 
 def login(username, password):
-    db = person_setup()
-    person = db.query(Person).get(username)
-    if not person:
-        return None
-    if person.password == password:
-        return newtoken(db, person)
-    else:
-        return None
-
-def register(username, password):
     db = cred_setup()
     cred = db.query(Cred).get(username)
+    if not cred:
+        return None
+    if cred.password == password:
+        return newtoken(db, cred)
+    else:
+        return None    
+
+
+def register(username, password):
+    cred_db = cred_setup()
+    cred = cred_db.query(Cred).get(username)
     if cred:
         return None
+
+    person_db = person_setup()
+    person = person_db.query(Person).get(username)
+    
+    if person: 
+        return None
+
     new_cred = Cred()
     new_cred.username = username
     new_cred.password = password
-    db.add(new_cred)
-    db.commit()
+    cred_db.add(new_cred)
 
-    return newtoken(db, new_cred)    
+    new_person = Person()
+    new_person.username = username
+    person_db.add(new_person)
+
+    cred_db.commit()
+    person_db.commit()
+
+    return newtoken(cred_db, new_cred)    
 
 
 def check_token(username, token):
-    db = person_setup()
-    person = db.query(Person).get(username)
-    if person and person.token == token:
+    db = cred_setup()
+    cred = db.query(Cred).get(username)
+    if cred and cred.token == token:
         return True
     else:
         return False
+

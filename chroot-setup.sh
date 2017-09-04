@@ -58,6 +58,9 @@ cp -r /usr/share/zoneinfo/America /jail/usr/share/zoneinfo/
 
 create_socket_dir /jail/echosvc 61010:61010 755
 
+# create socket for auth
+create_socket_dir /jail/authsvc 61009:61009 755
+
 mkdir -p /jail/tmp
 chmod a+rwxt /jail/tmp
 
@@ -69,12 +72,17 @@ rm -rf /jail/zoobar/db
 
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
+python /jail/zoobar/zoodb.py init-cred
 
 # dynmiac_svc
 chown -R 0:61012 /jail/zoobar/db
 chown 61012:61012 /jail/zoobar/*.cgi
-
 chmod -R 771 /jail/zoobar/db
+
+# for auth_svc read/write only
+chown -R 61009:61009 /jail/zoobar/db/cred
+chmod -R 700 /jail/zoobar/db/cred
+
 
 
 

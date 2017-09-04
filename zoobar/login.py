@@ -32,6 +32,7 @@ class User(object):
         
        # token = auth.register(username, password)
         token = auth_client.register(username, password)
+         
         if token is not None:
             return self.loginCookie(username, token)
         else:

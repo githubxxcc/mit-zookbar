@@ -18,8 +18,4 @@ def register(username, password):
 def check_token(username, token):
     ## Fill in code here.
     with rpclib.client_connect('/authsvc/sock') as c:
-        ret_token = c.call('check_token', username=username)
-        if ret_token is not None and ret_token == token:
-            return True
-        else:
-            return False
+        return c.call('check_token', username=username, token=token)

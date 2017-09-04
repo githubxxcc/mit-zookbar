@@ -61,5 +61,7 @@ if __name__ == "__main__":
         person_setup()
     elif cmd == 'init-transfer':
         transfer_setup()
+    elif cmd == 'init-cred':
+        cred_setup()
     else:
         raise Exception("unknown command %s" % cmd)
