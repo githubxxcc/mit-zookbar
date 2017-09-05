@@ -60,6 +60,8 @@ create_socket_dir /jail/echosvc 61010:61010 755
 
 # create socket for auth
 create_socket_dir /jail/authsvc 61009:61009 755
+create_socket_dir /jail/banksvc 61008:61008 755
+
 
 mkdir -p /jail/tmp
 chmod a+rwxt /jail/tmp
@@ -73,6 +75,7 @@ rm -rf /jail/zoobar/db
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-transfer
 python /jail/zoobar/zoodb.py init-cred
+python /jail/zoobar/zoodb.py init-bank
 
 # dynmiac_svc
 chown -R 0:61012 /jail/zoobar/db
@@ -84,6 +87,10 @@ chown -R 61009:61009 /jail/zoobar/db/cred
 chmod -R 700 /jail/zoobar/db/cred
 
 
-
+# for bank_svc r/w only
+chown -R 61008:61008 /jail/zoobar/db/bank 
+chown -R 61008:61012 /jail/zoobar/db/transfer
+chmod -R 711 /jail/zoobar/db/bank 
+chmod -R 751 /jail/zoobar/db/transfer
 
 

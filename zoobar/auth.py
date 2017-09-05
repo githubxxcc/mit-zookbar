@@ -1,6 +1,7 @@
 from zoodb import *
 from debug import *
 from base64 import b64encode, b64decode
+from bank import *
 
 import hashlib
 import random
@@ -59,6 +60,7 @@ def register(username, password):
 
     cred_db.commit()
     person_db.commit()
+    initbank(username)
 
     return newtoken(cred_db, new_cred)    
 
