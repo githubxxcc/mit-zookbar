@@ -61,6 +61,7 @@ create_socket_dir /jail/echosvc 61010:61010 755
 # create socket for auth
 create_socket_dir /jail/authsvc 61009:61009 755
 create_socket_dir /jail/banksvc 61008:61008 755
+create_socket_dir /jail/profilesvc 61007:61007 755
 
 
 mkdir -p /jail/tmp

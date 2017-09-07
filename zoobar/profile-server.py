@@ -4,14 +4,13 @@ import rpclib
 import sys
 import os
 import sandboxlib
-import urllib
 import hashlib
 import socket
 import bank
 import zoodb
 
 from debug import *
-
+from base64 import b64encode
 ## Cache packages that the sandboxed code might want to import
 import time
 import errno
@@ -56,10 +55,15 @@ def run_profile(pcode, profile_api_client):
 
 class ProfileServer(rpclib.RpcServer):
     def rpc_run(self, pcode, user, visitor):
-        uid = 0
+        uid = 61007
+        gid = 61007
+        encodeduser = b64encode(user)
+        userdir = '/tmp/'+ encodeduser
 
-        userdir = '/tmp'
-
+        if not os.path.exists(userdir):
+            os.makedirs(userdir,711)
+            os.chown(userdir, uid, gid)
+            
         (sa, sb) = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM, 0)
         pid = os.fork()
         if pid == 0:
