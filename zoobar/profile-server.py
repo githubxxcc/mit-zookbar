@@ -8,7 +8,9 @@ import hashlib
 import socket
 import bank
 import zoodb
+import login
 
+from flask import g
 from debug import *
 from base64 import b64encode
 ## Cache packages that the sandboxed code might want to import
@@ -16,7 +18,8 @@ import time
 import errno
 
 class ProfileAPIServer(rpclib.RpcServer):
-    def __init__(self, user, visitor):
+    def __init__(self, user, visitor, uid):
+        os.setresuid(uid, uid, uid)
         self.user = user
         self.visitor = visitor
 
@@ -49,6 +52,8 @@ class ProfileAPIServer(rpclib.RpcServer):
     def rpc_xfer(self, target, zoobars):
         bank.transfer(self.user, target, zoobars)
 
+
+
 def run_profile(pcode, profile_api_client):
     globals = {'api': profile_api_client}
     exec pcode in globals
@@ -63,13 +68,14 @@ class ProfileServer(rpclib.RpcServer):
         if not os.path.exists(userdir):
             os.makedirs(userdir,711)
             os.chown(userdir, uid, gid)
-            
+           
+ 
         (sa, sb) = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM, 0)
         pid = os.fork()
         if pid == 0:
             if os.fork() <= 0:
                 sa.close()
-                ProfileAPIServer(user, visitor).run_sock(sb)
+                ProfileAPIServer(user, visitor, uid).run_sock(sb)
                 sys.exit(0)
             else:
                 sys.exit(0)

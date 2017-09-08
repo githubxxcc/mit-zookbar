@@ -92,6 +92,6 @@ chmod -R 700 /jail/zoobar/db/cred
 chown -R 61008:61008 /jail/zoobar/db/bank 
 chown -R 61008:61012 /jail/zoobar/db/transfer
 chmod -R 711 /jail/zoobar/db/bank 
-chmod -R 751 /jail/zoobar/db/transfer
+chmod -R 750 /jail/zoobar/db/transfer
 
 
